@@ -15,4 +15,11 @@ function sassCompile(cb) {
     cb();
 }
 
+function sassWatch(cb) {
+    gulp.watch("./sass/**/*.sass", sassCompile);
+    
+    cb();
+}
+
 gulp.task("sass", sassCompile);
+gulp.task("sass:watch", sassWatch);
