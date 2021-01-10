@@ -1,2 +1,2 @@
 # 0-Default
-Паттерн для создания сайта
+Start pattern for create a Web-site
