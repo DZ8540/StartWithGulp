@@ -7,3 +7,4 @@ Gulp tasks:
 3) webp - convert all images to Webp
 4) htmlMin - minify all html files on root
 5) cssMin - minify all css files on css directory
+6) jsMin - minify all js files on js directory
