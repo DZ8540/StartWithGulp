@@ -9,3 +9,4 @@ Gulp tasks:
 5) cssMin - minify all css files on css directory
 6) jsMin - minify all js files on js directory
 7) syncOn - enable browserSync with task "sass:watch"
+8) concat - concat ALL js and css files in THEIR directories

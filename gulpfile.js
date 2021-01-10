@@ -7,21 +7,18 @@ const gulp = require("gulp"),
     htmlmin = require("gulp-htmlmin"),
     cleanCSS = require("gulp-clean-css"),
     jsmin = require("gulp-jsmin"),
-    browserSync = require("browser-sync").create();
+    browserSync = require("browser-sync").create(),
+    concat = require('gulp-concat');
 
 sass.compiler = require("node-sass");
 
 function sassCompile(cb) {
-    gulp.src("./sass/dz.sass")
+    gulp.src("./sass/**/*.sass")
         .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: "compressed"
         }).on("error", sass.logError))
-        .pipe(rename({
-            basename: "style",
-            suffix: ".min",
-            extname: ".css"
-        }))
+        .pipe(rename({suffix: ".min"}))
         .pipe(autoprefixer({
             cascade: false
         }))
@@ -118,6 +115,18 @@ function _watchAllFiles(cb) {
     cb();
 }
 
+function concatAllFiles(cb) {
+    let files = ["js", "css"];
+
+    for (let file of files) {
+        gulp.src(`./${file}/**/*.${file}`)
+            .pipe(concat(`all.${file}`))
+            .pipe(gulp.dest(`./${file}/`));
+    }
+    
+    cb();
+}
+
 gulp.task("sass", sassCompile);
 gulp.task("sass:watch", sassWatch);
 gulp.task("webp", toWebp);
@@ -125,3 +134,4 @@ gulp.task("htmlMin", htmlMin);
 gulp.task("cssMin", cssMin);
 gulp.task("jsMin", jsMin);
 gulp.task("syncOn", gulp.series(browserSyncOn, sassWatch, _watchAllFiles));
+gulp.task("concat", concatAllFiles);
