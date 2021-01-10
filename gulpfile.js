@@ -2,11 +2,13 @@ const gulp = require("gulp");
 const sass = require("gulp-sass");
 const rename = require("gulp-rename");
 const autoprefixer = require("gulp-autoprefixer");
+const sourcemaps = require('gulp-sourcemaps');
 
 sass.compiler = require('node-sass');
 
 function sassCompile(cb) {
     gulp.src("./sass/dz.sass")
+        .pipe(sourcemaps.init())
         .pipe(sass({
             outputStyle: "compressed"
         }).on("error", sass.logError))
@@ -14,6 +16,7 @@ function sassCompile(cb) {
         .pipe(autoprefixer({
             cascade: false
         }))
+        .pipe(sourcemaps.write("./maps/"))
         .pipe(gulp.dest("./css/"));
     
     cb();
