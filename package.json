@@ -1,0 +1,24 @@
+{
+  "name": "start",
+  "version": "1.0.1",
+  "description": "Start pattern for create a Web-site",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DZ8540/0-Default.git"
+  },
+  "author": "DZ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DZ8540/0-Default/issues"
+  },
+  "homepage": "https://github.com/DZ8540/0-Default#readme",
+  "dependencies": {
+    "gulp": "^4.0.2",
+    "gulp-rename": "^2.0.0",
+    "gulp-sass": "^4.1.0"
+  }
+}
