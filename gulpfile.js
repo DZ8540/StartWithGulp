@@ -6,7 +6,8 @@ const gulp = require("gulp"),
     cwebp = require("gulp-cwebp"),
     htmlmin = require("gulp-htmlmin"),
     cleanCSS = require("gulp-clean-css"),
-    jsmin = require("gulp-jsmin");
+    jsmin = require("gulp-jsmin"),
+    browserSync = require("browser-sync").create();
 
 sass.compiler = require("node-sass");
 
@@ -25,7 +26,8 @@ function sassCompile(cb) {
             cascade: false
         }))
         .pipe(sourcemaps.write("./maps/"))
-        .pipe(gulp.dest("./css/"));
+        .pipe(gulp.dest("./css/"))
+        .pipe(browserSync.stream());
     
     cb();
 }
@@ -60,7 +62,7 @@ function cssMin(cb) {
     gulp.src("./css/*.css")
         .pipe(sourcemaps.init())
         .pipe(cleanCSS({
-            compatibility: 'ie8+',
+            compatibility: "ie8+",
             debug: true
         }, (details) => {
             console.log(`${details.name}: ${details.stats.originalSize}`);
@@ -72,21 +74,47 @@ function cssMin(cb) {
             extname: ".css"
         }))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./css/'));
+        .pipe(gulp.dest("./css/"));
     
     cb();
 }
 
 function jsMin(cb) {
-    gulp.src('./js/*.js')
+    gulp.src("./js/*.js")
         .pipe(jsmin())
         .pipe(rename({
             basename: "dz",
             suffix: ".min",
             extname: ".js"
         }))
-        .pipe(gulp.dest('./js/'));
+        .pipe(gulp.dest("./js/"));
     
+    cb();
+}
+
+function browserSyncOn(cb) {
+    browserSync.init({
+        server: {
+            baseDir: "./"
+        }
+    });
+
+    gulp.watch("./*.html")
+        .on('change', browserSync.reload);
+
+    console.log("I'm same to watching sass and other all files for you)))!!!!");
+    
+    cb();
+}
+
+function _watchAllFiles(cb) {
+    gulp.watch(["./js/**/*.js", "./img/**/*"], {
+        events: ['add', 'change', 'unlink']
+    }, () => {
+        gulp.src("./")
+            .pipe(browserSync.stream());
+    });
+
     cb();
 }
 
@@ -96,3 +124,4 @@ gulp.task("webp", toWebp);
 gulp.task("htmlMin", htmlMin);
 gulp.task("cssMin", cssMin);
 gulp.task("jsMin", jsMin);
+gulp.task("syncOn", gulp.series(browserSyncOn, sassWatch, _watchAllFiles));
