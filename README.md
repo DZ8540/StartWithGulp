@@ -6,3 +6,4 @@ Gulp tasks:
 2) sass:watch - watching your sass files and compile it without command sass
 3) webp - convert all images to Webp
 4) htmlMin - minify all html files on root
+5) cssMin - minify all css files on css directory

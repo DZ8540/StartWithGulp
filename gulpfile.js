@@ -5,6 +5,7 @@ const autoprefixer = require("gulp-autoprefixer");
 const sourcemaps = require("gulp-sourcemaps");
 const cwebp = require("gulp-cwebp");
 const htmlmin = require("gulp-htmlmin");
+const cleanCSS = require("gulp-clean-css");
 
 sass.compiler = require("node-sass");
 
@@ -50,7 +51,24 @@ function htmlMin(cb) {
     cb();
 }
 
+function cssMin(cb) {
+    gulp.src("./css/*.css")
+        .pipe(sourcemaps.init())
+        .pipe(cleanCSS({
+            compatibility: 'ie8+',
+            debug: true
+        }, (details) => {
+            console.log(`${details.name}: ${details.stats.originalSize}`);
+            console.log(`${details.name}: ${details.stats.minifiedSize}`);
+        }))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./css/'));
+    
+    cb();
+}
+
 gulp.task("sass", sassCompile);
 gulp.task("sass:watch", sassWatch);
 gulp.task("webp", toWebp);
 gulp.task("htmlMin", htmlMin);
+gulp.task("cssMin", cssMin);
