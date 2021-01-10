@@ -1,11 +1,12 @@
-const gulp = require("gulp");
-const sass = require("gulp-sass");
-const rename = require("gulp-rename");
-const autoprefixer = require("gulp-autoprefixer");
-const sourcemaps = require("gulp-sourcemaps");
-const cwebp = require("gulp-cwebp");
-const htmlmin = require("gulp-htmlmin");
-const cleanCSS = require("gulp-clean-css");
+const gulp = require("gulp"),
+    sass = require("gulp-sass"),
+    rename = require("gulp-rename"),
+    autoprefixer = require("gulp-autoprefixer"),
+    sourcemaps = require("gulp-sourcemaps"),
+    cwebp = require("gulp-cwebp"),
+    htmlmin = require("gulp-htmlmin"),
+    cleanCSS = require("gulp-clean-css"),
+    jsmin = require("gulp-jsmin");
 
 sass.compiler = require("node-sass");
 
@@ -15,7 +16,11 @@ function sassCompile(cb) {
         .pipe(sass({
             outputStyle: "compressed"
         }).on("error", sass.logError))
-        .pipe(rename("style.css"))
+        .pipe(rename({
+            basename: "style",
+            suffix: ".min",
+            extname: ".css"
+        }))
         .pipe(autoprefixer({
             cascade: false
         }))
@@ -61,8 +66,26 @@ function cssMin(cb) {
             console.log(`${details.name}: ${details.stats.originalSize}`);
             console.log(`${details.name}: ${details.stats.minifiedSize}`);
         }))
+        .pipe(rename({
+            basename: "style",
+            suffix: ".min",
+            extname: ".css"
+        }))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('./css/'));
+    
+    cb();
+}
+
+function jsMin(cb) {
+    gulp.src('./js/*.js')
+        .pipe(jsmin())
+        .pipe(rename({
+            basename: "dz",
+            suffix: ".min",
+            extname: ".js"
+        }))
+        .pipe(gulp.dest('./js/'));
     
     cb();
 }
@@ -72,3 +95,4 @@ gulp.task("sass:watch", sassWatch);
 gulp.task("webp", toWebp);
 gulp.task("htmlMin", htmlMin);
 gulp.task("cssMin", cssMin);
+gulp.task("jsMin", jsMin);
